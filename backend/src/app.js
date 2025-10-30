@@ -13,7 +13,7 @@ connectDB();
 const app = express();
 app.use(
   cors({
-    origin: "https://highway-delite-asgmt.vercel.app",
+    origin: process.env.CLIENT_URL,
   })
 );
 app.use(express.json());
