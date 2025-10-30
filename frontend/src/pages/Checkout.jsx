@@ -122,7 +122,7 @@ export default function Checkout() {
           </div>
         </div>
 
-        <div className="mt-4 flex gap-2 items-center">
+        <div className="mt-4 flex gap-2 items-center sm:flex-col">
           <input
             className="flex-1 p-3 rounded bg-gray-200"
             placeholder="Promo code"
