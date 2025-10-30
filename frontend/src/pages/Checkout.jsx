@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import API from "../utils/api";
+import { ArrowLeft } from "lucide-react";
 
 export default function Checkout() {
   const loc = useLocation();
   const navigate = useNavigate();
   const init = loc.state || {};
+
   const [name, setName] = useState(init.name || "");
   const [email, setEmail] = useState(init.email || "");
   const [promo, setPromo] = useState("");
@@ -24,10 +26,9 @@ export default function Checkout() {
   } = init;
 
   const subtotal = initSub || experience?.basePrice * (qty || 1);
-
   const taxes =
     initTaxes || Math.round(subtotal * (experience?.taxPercent / 100 || 0));
-  
+
   const total = promoInfo
     ? subtotal + taxes - (promoInfo.discount || 0)
     : subtotal + taxes;
@@ -35,39 +36,24 @@ export default function Checkout() {
   const applyPromo = async () => {
     try {
       const r = await API.post(`/promo/validate`, { code: promo, subtotal });
-
       if (r.data.valid) setPromoInfo(r.data);
       else setPromoInfo({ invalid: true });
-
     } catch {
       setPromoInfo({ invalid: true });
     }
   };
 
-  const validateEmail = (email) => {
-    // Basic email regex validation
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const onPay = async () => {
     setError("");
 
-    if (!name.trim()) {
-      setError("Please enter your full name");
-      return;
-    }
-    if (!email.trim()) {
-      setError("Please enter your email");
-      return;
-    }
-    if (!validateEmail(email)) {
-      setError("Please enter a valid email address");
-      return;
-    }
-    if (!agree) {
-      setError("You must agree to the terms and safety policy");
-      return;
-    }
+    if (!name.trim()) return setError("Please enter your full name");
+    if (!email.trim()) return setError("Please enter your email");
+    if (!validateEmail(email))
+      return setError("Please enter a valid email address");
+    if (!agree)
+      return setError("You must agree to the terms and safety policy");
 
     try {
       const payload = {
@@ -81,7 +67,7 @@ export default function Checkout() {
           ? { code: promoInfo.code, discount: promoInfo.discount }
           : null,
       };
-      
+
       const r = await API.post("/bookings", payload);
       if (r.data.success) {
         navigate("/result", {
@@ -103,7 +89,17 @@ export default function Checkout() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative mx-10">
+      {/* 🔙 Back Arrow + Checkout text */}
+      <div
+        className="flex items-center gap-1 cursor-pointer text-gray-800 text-md font-medium col-span-full -mt-4 -mb-2"
+        onClick={() => navigate(-1)}
+      >
+        <ArrowLeft size={20} />
+        <span>Checkout</span>
+      </div>
+
+      {/* LEFT SIDE FORM */}
       <div className="lg:col-span-2 bg-gray-100 rounded-xl p-6 h-fit">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -164,7 +160,8 @@ export default function Checkout() {
         </div>
       </div>
 
-      <div className="bg-gray-200 rounded-xl p-4">
+      {/* RIGHT SIDE SUMMARY CARD */}
+      <div className="bg-gray-200 rounded-xl p-4 h-fit">
         <div className="mt-1 text-gray-600 flex justify-between">
           <span>Experience</span>
           <div className="font-semibold text-black">{experience?.title}</div>

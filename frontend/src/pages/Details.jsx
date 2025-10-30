@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../utils/api";
+import { ArrowLeft } from "lucide-react";
 
 export default function Details() {
   const { id } = useParams();
@@ -34,7 +35,7 @@ export default function Details() {
   const onConfirm = () => {
     if (!date || !time) {
       setError("⚠️ Please select both date and time before continuing.");
-      setTimeout(() => setError(""), 3000); // clear after 3s
+      setTimeout(() => setError(""), 3000);
       return;
     }
     setError("");
@@ -44,16 +45,30 @@ export default function Details() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative mx-8">
+      {/* LEFT SIDE (Details + Image) */}
       <div className="lg:col-span-2">
+        {/* 🔙 Back Arrow + Details text (TOP SECTION) */}
+        <div
+          className="flex items-center gap-1 cursor-pointer text-gray-800 text-md font-medium mb-3 -mt-3"
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeft size={20} />
+          <span>Details</span>
+        </div>
+
+        {/* 🖼️ Image below the text */}
         <img
           src={exp.image}
-          className="w-full h-85 object-cover rounded-lg"
+          className="w-full h-85 object-cover rounded-lg mb-5"
           alt={exp.title}
         />
-        <h2 className="text-2xl font-semibold mt-4">{exp.title}</h2>
+
+        {/* 📝 Title and Description */}
+        <h2 className="text-2xl font-semibold">{exp.title}</h2>
         <p className="text-gray-500 mt-2">{exp.description}</p>
 
+        {/* 📅 DATE SELECTION */}
         <div className="mt-6">
           <h4 className="font-semibold">Choose date</h4>
           <div className="flex gap-3 mt-3 flex-wrap">
@@ -63,7 +78,7 @@ export default function Details() {
                 onClick={() => {
                   setDate(s.date);
                   setTime("");
-                  setError(""); // clear error if user selects
+                  setError("");
                 }}
                 className={`px-3 py-2 rounded ${
                   date === s.date
@@ -77,6 +92,7 @@ export default function Details() {
           </div>
         </div>
 
+        {/* ⏰ TIME SELECTION */}
         <div className="mt-6">
           <h4 className="font-semibold">Choose time</h4>
           <div className="flex gap-3 mt-3 flex-wrap">
@@ -119,6 +135,7 @@ export default function Details() {
           </div>
         </div>
 
+        {/* ℹ️ ABOUT SECTION */}
         <div className="mt-6">
           <h4 className="font-semibold">About</h4>
           <p className="text-gray-500 bg-gray-200 mt-2 px-3 py-2 rounded-md">
@@ -127,7 +144,8 @@ export default function Details() {
         </div>
       </div>
 
-      <div className="bg-gray-100 rounded-xl shadow p-4 h-fit">
+      {/* RIGHT SIDE CARD */  }
+      <div className="bg-gray-100 rounded-xl shadow p-4 h-fit mt-4">
         <div className="flex justify-between">
           <div>Starts at</div>
           <div className="text-md font-medium">₹{exp.basePrice}</div>
