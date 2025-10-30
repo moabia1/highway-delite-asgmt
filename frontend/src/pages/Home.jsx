@@ -5,12 +5,15 @@ import ExperienceCard from "../components/ExperienceCard";
 
 export default function Home() {
   const [exps, setExps] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const location = useLocation();
 
   useEffect(() => {
     API.get("/experiences")
       .then((r) => setExps(r.data.experiences))
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   const queryParams = new URLSearchParams(location.search);
@@ -34,7 +37,11 @@ export default function Home() {
           </div>
         ) : (
           <div className="text-center text-gray-500 mt-10">
-            No experiences found.
+            {loading ? (
+              <p className="text-center mt-10 text-gray-500">Loading data...</p>
+            ) : (
+              exps.map((item) => <ExperienceCard key={item._id} {...item} />)
+            )}
           </div>
         )}
       </div>
