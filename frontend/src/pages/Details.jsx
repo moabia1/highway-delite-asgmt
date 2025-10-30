@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../utils/api";
 import { ArrowLeft, Loader } from "lucide-react";
+
 import DateSelector from "../components/DateSelector";
 import TimeSelector from "../components/TimeSelector";
+import BookingCard from "../components/BookingCard";
 
 export default function Details() {
   const { id } = useParams();
@@ -22,7 +24,7 @@ export default function Details() {
 
   if (!exp)
     return (
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center h-screen">
         <Loader className="size-10 animate-spin" />
       </div>
     );
@@ -55,6 +57,7 @@ export default function Details() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative mx-8">
       {/* LEFT SIDE */}
       <div className="lg:col-span-2">
+        {/* Header */}
         <div
           className="flex items-center gap-1 cursor-pointer text-gray-800 text-md font-medium mb-3 -mt-3"
           onClick={() => navigate(-1)}
@@ -63,16 +66,18 @@ export default function Details() {
           <span>Details</span>
         </div>
 
+        {/*  Image */}
         <img
           src={exp.image}
           className="w-full h-85 object-cover rounded-lg mb-5"
           alt={exp.title}
         />
 
+        {/* Title & Description */}
         <h2 className="text-2xl font-semibold">{exp.title}</h2>
         <p className="text-gray-500 mt-2">{exp.description}</p>
 
-        {/* ✅ Replaced date/time with components */}
+        {/*  Date & Time Selection */}
         <DateSelector
           dates={dates}
           date={date}
@@ -80,7 +85,6 @@ export default function Details() {
           setTime={setTime}
           setError={setError}
         />
-
         <TimeSelector
           dates={dates}
           date={date}
@@ -89,6 +93,7 @@ export default function Details() {
           setError={setError}
         />
 
+        {/* ℹ️ About */}
         <div className="mt-6">
           <h4 className="font-semibold">About</h4>
           <p className="text-gray-500 bg-gray-200 mt-2 px-3 py-2 rounded-md">
@@ -97,60 +102,19 @@ export default function Details() {
         </div>
       </div>
 
-      {/* RIGHT SIDE CARD (unchanged) */}
-      <div className="bg-gray-100 rounded-xl shadow p-4 h-fit mt-5">
-        <div className="flex justify-between">
-          <div>Starts at</div>
-          <div className="text-md font-medium">₹{exp.basePrice}</div>
-        </div>
-
-        <div className="mt-2 flex justify-between items-center">
-          <div>Quantity</div>
-          <div className="flex items-center gap-1 justify-center">
-            <button
-              className="flex items-center justify-center"
-              onClick={() => setQty(Math.max(1, qty - 1))}
-            >
-              <span className="border border-gray-400 px-1">-</span>
-            </button>
-            <div>{qty}</div>
-            <button
-              className="flex items-center justify-center"
-              onClick={() => setQty(qty + 1)}
-            >
-              <span className="border border-gray-400 px-1">+</span>
-            </button>
-          </div>
-        </div>
-
-        <div className="flex justify-between mt-2">
-          <div>Subtotal</div>
-          <div>₹{subtotal}</div>
-        </div>
-        <div className="flex justify-between mt-2">
-          <div>Taxes</div>
-          <div>₹{taxes}</div>
-        </div>
-
-        <div className="border-t my-3 border-gray-400"></div>
-        <div className="flex justify-between font-semibold">
-          <div>Total</div>
-          <div>₹{total}</div>
-        </div>
-
-        <button
-          onClick={onConfirm}
-          className={`mt-4 w-full py-2 rounded ${
-            time && date ? "bg-yellow-400" : "bg-gray-300"
-          }`}
-        >
-          Confirm
-        </button>
-
-        {error && (
-          <div className="text-red-600 text-sm mt-2 text-center">{error}</div>
-        )}
-      </div>
+      {/* RIGHT SIDE CARD */}
+      <BookingCard
+        exp={exp}
+        qty={qty}
+        setQty={setQty}
+        subtotal={subtotal}
+        taxes={taxes}
+        total={total}
+        time={time}
+        date={date}
+        onConfirm={onConfirm}
+        error={error}
+      />
     </div>
   );
 }
