@@ -150,7 +150,7 @@ export default function Details() {
       </div>
 
       {/* RIGHT SIDE CARD */}
-      <div className="bg-gray-100 rounded-xl shadow p-4 h-fit mt-4">
+      <div className="bg-gray-100 rounded-xl shadow p-4 h-fit mt-5">
         <div className="flex justify-between">
           <div>Starts at</div>
           <div className="text-md font-medium">₹{exp.basePrice}</div>
