@@ -1,11 +1,14 @@
 const express = require("express");
 const cors = require("cors");
-const connectDB = require("./db");
-require("dotenv").config();
+const connectDB = require("./db/db");
 
 const experienceRoutes = require("./routes/experiences");
 const bookingRoutes = require("./routes/bookings");
 const promoRoutes = require("./routes/promo");
+
+
+// connect DB
+connectDB();
 
 const app = express();
 app.use(cors({
@@ -17,7 +20,5 @@ app.use("/api/experiences", experienceRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/promo", promoRoutes);
 
-// connect DB
-connectDB().catch((err) => console.error(err));
 
 module.exports = app;

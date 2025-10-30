@@ -12,14 +12,17 @@ Basic booking flow:
 
 exports.createBooking = async (req, res) => {
   const { experienceId, name, email, date, time, qty = 1, promo } = req.body;
+
   if (!experienceId || !name || !email || !date || !time) {
     return res.status(400).json({ message: "Missing required fields" });
   }
 
   const session = await mongoose.startSession();
   session.startTransaction();
+
   try {
     const exp = await Experience.findById(experienceId).session(session);
+    
     if (!exp) throw new Error("Experience not found");
 
     // find the slot & time

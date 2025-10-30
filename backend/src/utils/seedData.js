@@ -231,8 +231,10 @@ const seed = async () => {
     // more experiences...
   ];
 
+
   await Experience.insertMany(exps);
   console.log("Seeded");
+  
   process.exit(0);
 };
 

@@ -24,8 +24,10 @@ export default function Checkout() {
   } = init;
 
   const subtotal = initSub || experience?.basePrice * (qty || 1);
+
   const taxes =
     initTaxes || Math.round(subtotal * (experience?.taxPercent / 100 || 0));
+  
   const total = promoInfo
     ? subtotal + taxes - (promoInfo.discount || 0)
     : subtotal + taxes;
@@ -33,8 +35,10 @@ export default function Checkout() {
   const applyPromo = async () => {
     try {
       const r = await API.post(`/promo/validate`, { code: promo, subtotal });
+
       if (r.data.valid) setPromoInfo(r.data);
       else setPromoInfo({ invalid: true });
+
     } catch {
       setPromoInfo({ invalid: true });
     }
@@ -77,6 +81,7 @@ export default function Checkout() {
           ? { code: promoInfo.code, discount: promoInfo.discount }
           : null,
       };
+      
       const r = await API.post("/bookings", payload);
       if (r.data.success) {
         navigate("/result", {

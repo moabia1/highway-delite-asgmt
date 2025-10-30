@@ -11,6 +11,7 @@ module.exports = (schema) => (req, res, next) => {
       missing.push(key);
     }
   });
+  
   if (missing.length)
     return res.status(400).json({ message: "Missing fields", fields: missing });
   next();
