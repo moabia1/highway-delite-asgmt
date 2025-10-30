@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../utils/api";
 import { ArrowLeft, Loader } from "lucide-react";
+import DateSelector from "../components/DateSelector";
+import TimeSelector from "../components/TimeSelector";
 
 export default function Details() {
   const { id } = useParams();
@@ -51,9 +53,8 @@ export default function Details() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative mx-8">
-      {/* LEFT SIDE (Details + Image) */}
+      {/* LEFT SIDE */}
       <div className="lg:col-span-2">
-        {/* 🔙 Back Arrow + Details text (TOP SECTION) */}
         <div
           className="flex items-center gap-1 cursor-pointer text-gray-800 text-md font-medium mb-3 -mt-3"
           onClick={() => navigate(-1)}
@@ -62,85 +63,32 @@ export default function Details() {
           <span>Details</span>
         </div>
 
-        {/* 🖼️ Image below the text */}
         <img
           src={exp.image}
           className="w-full h-85 object-cover rounded-lg mb-5"
           alt={exp.title}
         />
 
-        {/* 📝 Title and Description */}
         <h2 className="text-2xl font-semibold">{exp.title}</h2>
         <p className="text-gray-500 mt-2">{exp.description}</p>
 
-        {/* 📅 DATE SELECTION */}
-        <div className="mt-6">
-          <h4 className="font-semibold">Choose date</h4>
-          <div className="flex gap-3 mt-3 flex-wrap">
-            {dates.map((s) => (
-              <button
-                key={s.date}
-                onClick={() => {
-                  setDate(s.date);
-                  setTime("");
-                  setError("");
-                }}
-                className={`px-3 py-2 rounded ${
-                  date === s.date
-                    ? "bg-yellow-400 text-black"
-                    : "border-2 border-gray-300"
-                }`}
-              >
-                {s.date}
-              </button>
-            ))}
-          </div>
-        </div>
+        {/* ✅ Replaced date/time with components */}
+        <DateSelector
+          dates={dates}
+          date={date}
+          setDate={setDate}
+          setTime={setTime}
+          setError={setError}
+        />
 
-        {/* ⏰ TIME SELECTION */}
-        <div className="mt-6">
-          <h4 className="font-semibold">Choose time</h4>
-          <div className="flex gap-3 mt-3 flex-wrap">
-            {date ? (
-              dates
-                .find((s) => s.date === date)
-                .times.map((t) => (
-                  <button
-                    key={t.time}
-                    onClick={() => {
-                      if (t.capacity - (t.sold || 0) <= 0) return;
-                      setTime(t.time);
-                      setError("");
-                    }}
-                    className={`px-3 py-2 rounded ${
-                      time === t.time
-                        ? "bg-yellow-400 text-black"
-                        : "border-2 border-gray-300"
-                    } ${
-                      t.capacity - (t.sold || 0) <= 0
-                        ? "opacity-50 cursor-not-allowed"
-                        : ""
-                    }`}
-                  >
-                    {t.time}
-                    {t.capacity - (t.sold || 0) <= 0 ? (
-                      <span className="ml-2 text-xs text-gray-400">
-                        Sold out
-                      </span>
-                    ) : (
-                      <span className="ml-2 text-xs text-red-600">
-                        {t.capacity - (t.sold || 0)} left
-                      </span>
-                    )}
-                  </button>
-                ))
-            ) : (
-              <div className="text-gray-500">Select date first</div>
-            )}
-          </div>
-        </div>
+        <TimeSelector
+          dates={dates}
+          date={date}
+          time={time}
+          setTime={setTime}
+          setError={setError}
+        />
 
-        {/* ℹ️ ABOUT SECTION */}
         <div className="mt-6">
           <h4 className="font-semibold">About</h4>
           <p className="text-gray-500 bg-gray-200 mt-2 px-3 py-2 rounded-md">
@@ -149,7 +97,7 @@ export default function Details() {
         </div>
       </div>
 
-      {/* RIGHT SIDE CARD */}
+      {/* RIGHT SIDE CARD (unchanged) */}
       <div className="bg-gray-100 rounded-xl shadow p-4 h-fit mt-5">
         <div className="flex justify-between">
           <div>Starts at</div>
