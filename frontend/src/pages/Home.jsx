@@ -38,8 +38,8 @@ export default function Home() {
             ))}
           </div>
         ) : (
-          <div className="text-center text-gray-500 mt-10">
-            {loading ? <Loader className='size-10 animate-spin'/> : ""}
+          <div className="flex items-center justify-center">
+            <Loader className="size-10 animate-spin" />
           </div>
         )}
       </div>
