@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../utils/api";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader } from "lucide-react";
 
 export default function Details() {
   const { id } = useParams();
@@ -18,7 +18,12 @@ export default function Details() {
       .catch(() => {});
   }, [id]);
 
-  if (!exp) return <div>Loading...</div>;
+  if (!exp)
+    return (
+      <div className="flex items-center justify-center">
+        <Loader className="size-10 animate-spin" />
+      </div>
+    );
 
   const dates = exp.slots || [];
 
@@ -144,7 +149,7 @@ export default function Details() {
         </div>
       </div>
 
-      {/* RIGHT SIDE CARD */  }
+      {/* RIGHT SIDE CARD */}
       <div className="bg-gray-100 rounded-xl shadow p-4 h-fit mt-4">
         <div className="flex justify-between">
           <div>Starts at</div>
