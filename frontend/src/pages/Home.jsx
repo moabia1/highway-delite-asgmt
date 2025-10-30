@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import API from "../utils/api";
+import {Loader} from "lucide-react"
+  
 import ExperienceCard from "../components/ExperienceCard";
 
 export default function Home() {
@@ -37,11 +39,7 @@ export default function Home() {
           </div>
         ) : (
           <div className="text-center text-gray-500 mt-10">
-            {loading ? (
-              <p className="text-center mt-10 text-gray-500">Loading data...</p>
-            ) : (
-              exps.map((item) => <ExperienceCard key={item._id} {...item} />)
-            )}
+            {loading ? <Loader className='size-10 animate-spin'/> : ""}
           </div>
         )}
       </div>
