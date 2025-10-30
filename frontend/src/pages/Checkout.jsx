@@ -122,16 +122,16 @@ export default function Checkout() {
           </div>
         </div>
 
-        <div className="mt-4 flex gap-2 items-center lg:flex-col">
+        <div className="mt-4 flex flex-col sm:flex-row gap-2 items-center">
           <input
-            className="flex-1 p-3 rounded bg-gray-200"
+            className="flex-1 p-3 rounded bg-gray-200 w-full sm:w-auto"
             placeholder="Promo code"
             value={promo}
             onChange={(e) => setPromo(e.target.value)}
           />
           <button
             onClick={applyPromo}
-            className="px-5 py-3 bg-black text-white rounded-lg"
+            className="px-5 py-3 bg-black text-white rounded-lg w-full sm:w-auto"
           >
             Apply
           </button>
